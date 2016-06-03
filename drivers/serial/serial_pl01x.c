@@ -1,5 +1,4 @@
 #include <drivers/serial_pl01x.h>
-
 #include "../include/io.h"
 
 int serial_putc(const char c)

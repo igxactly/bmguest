@@ -26,23 +26,15 @@
 
 void gic_init(void)
 {
-    int i;
+    //int i;
     uint32_t periphbase;
 
-    // This code will be moved other parts, not here. */
-    /* Get GICv2 base address */
     periphbase = (uint32_t)(get_periphbase() & 0x000000FFFFFFFFFFULL);
-    if (periphbase == 0x0) {
-        printf("Warning: Curretn architecture has no value in CBAR\n    \
-                The architecture do not follow design philosophy from ARM recommendation\n");
-        // TODO(casionwoo): vaule of base address will be read from DTB or configuration file.
-        // Currently, we set the base address of gic to 0x2C000000, it is for RTSM.
-        periphbase = 0x2C000000;
-    }
+
     GICv2.gicd = periphbase + GICD_OFFSET;
     GICv2.gicc = periphbase + GICC_OFFSET;
     GICv2.gich = periphbase + GICH_OFFSET;
-
+#if 0
     /*
      * We usually use the name of variables in lower case, but
      * here, using upper case is special case for readability.
@@ -85,7 +77,7 @@ void gic_init(void)
         GICD_WRITE(GICD_ITARGETSR(i >> 2), 1 << 0 | 1 << 8 | 1 << 16 | 1 << 24);
     }
 #endif
-
+#endif
 
 }
 

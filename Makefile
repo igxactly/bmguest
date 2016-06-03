@@ -1,8 +1,9 @@
 # Makefile
 # TODO(wonseok): Add configuration file for board.
 
-#TARGET			= rtsm
-TARGET			= lager
+TARGET			= rtsm
+#TARGET			= lager
+#TARGET			= odroidxu
 ######################################################
 # MAKEFILE VERBOSE OPTION
 ######################################################
@@ -74,8 +75,12 @@ CFLAGS+=${DEFINES}
 
 ifeq (${TARGET}, rtsm)
 DEFINES += -DSERIAL_PL01X
-else ifeq (${TARGET}, lager)
+endif
+ifeq (${TARGET}, lager)
 DEFINES += -DSERIAL_SH
+endif
+ifeq (${TARGET}, odroidxu)
+DEFINES += -DSERIAL_S5P
 endif
 
 DEBUG=y
@@ -135,5 +140,5 @@ style:
 
 clean:
 	${Q}echo "[CLEAN] ${PROJECT}"
-	${Q}rm -rf ${OBJS} ${ELF} ${BUILD_PATH}/${MACHINE}.lds ${BIN}
+	${Q}rm -rf ${OBJS} ${ELF} ${BUILD_PATH}/${MACHINE}.lds ${BIN} ${SOURCE_PATH}/*.axf ${SOURCE_PATH}/*.bin
 	${Q}if [ -d $(BUILD_PATH) ]; then rm -r ${BUILD_PATH}; fi

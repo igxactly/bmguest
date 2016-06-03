@@ -8,6 +8,5 @@
 
 void console_init()
 {
-    // TODO(wonseok): add general initialization for console devices.
-    serial_init(115200, 24000000);
+    serial_init();
 }

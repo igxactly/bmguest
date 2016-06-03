@@ -1,7 +1,7 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
-#define MAHINE_TYPE             2272
+#define MAHINE_TYPE             4289
 #define CFG_CNTFRQ              100000000
 
 #define NR_CPUS                 2
@@ -9,17 +9,16 @@
 /*
  *  SOC param
  */
-#define CFG_GIC_BASE_PA     0x2C000000
-#define CFG_GICD_BASE_PA    0x2C001000
-#define CFG_GICC_BASE_PA    0x2C002000
+#define CFG_GIC_BASE_PA     0x10480000
+#define CFG_GICD_BASE_PA    0x10481000
+#define CFG_GICC_BASE_PA    0x10482000
 
 #define USEC 1000000
 
 #define COUNT_PER_USEC (CFG_CNTFRQ/USEC)
 #define TICKTIME_1MS 1000
-#define TICK_PERIOD_US 250
 #define MAX_IRQS 1024
 
-#define CFG_MEMMAP_PHYS_START      0x80000000
+#define CFG_MEMMAP_PHYS_START 0x40008000
 
-#endif  /* RTSM_CONFIG_H */
+#endif  /* ODROIDXU_CONFIG_H */
