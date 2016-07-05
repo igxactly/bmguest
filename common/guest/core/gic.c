@@ -3,6 +3,13 @@
 #include <log/uart_print.h>
 #include <hvmm_trace.h>
 #include <armv7_p15.h>
+
+#include <gtmr/limits.h>
+#include <gtmr/asm.h>
+#include <gtmr/mcrmrc.h>
+#include <gtmr/cp15.h>
+#include <gtmr/vmsa.h>
+#include <gtmr/generic_timer.h>
 /* #ifdef _SMP_ */
 #include <smp.h>
 /* #endif */
@@ -222,13 +229,17 @@ void gic_interrupt(int fiq, void *pregs)
     iar = _gic.ba_gicc[GICC_IAR];
     irq = iar & GICC_IAR_INTID_MASK;
     if (irq < _gic.lines) {
-        if (irq == 0) {
+        if (irq == 0 || irq == 30) {
             uart_print("ba_gicd:");
             uart_print_hex32((uint32_t) _gic.ba_gicd);
             uart_print("\n\r");
             uart_print("ba_gicc:");
             uart_print_hex32((uint32_t) _gic.ba_gicc);
-            uart_print("\n\r");
+            uart_print("\n\r\n\r");
+
+            uart_print("\n\rCNTPCT after (low): ");
+            uart_print_hex32((uint32_t) read_cp64(CNTPCT));
+            uart_print("\n\r\n\r");
         }
         /* ISR */
         if (_gic.handlers[irq])
