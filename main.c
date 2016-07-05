@@ -5,6 +5,14 @@
 #include <trap.h>
 #include <drivers/sp804_timer.h>
 
+#include <gtmr/limits.h>
+#include <gtmr/stdint.h>
+#include <gtmr/asm.h>
+#include <gtmr/mcrmrc.h>
+#include <gtmr/cp15.h>
+#include <gtmr/vmsa.h>
+#include <gtmr/generic_timer.h>
+
 int main()
 {
     int val;
