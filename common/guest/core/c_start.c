@@ -66,8 +66,6 @@ void nrm_loop(void)
     uart_print("=== Starting commom start up\n\r");
 
     gic_init();
-    /* Enables receiving virtual timer interrupt */
-    vtimer_mask(0);
     /* We are ready to accept irqs with GIC. Enable it now */
     irq_enable();
     /* Test the sample virtual device.
@@ -75,7 +73,10 @@ void nrm_loop(void)
      *   registered at the monitor.
      * - Otherwise, the monitor will hang with data abort.
      */
+#if 0
 #ifdef TESTS_ENABLE_VDEV_SAMPLE
+    /* Enables receiving virtual timer interrupt */
+    vtimer_mask(0);
     test_vdev_sample();
 #endif
     for (i = 0; i < NUM_ITERATIONS; i++) {
@@ -109,7 +110,7 @@ void nrm_loop(void)
 #endif
         nrm_delay();
     }
-
+#endif
     uart_print(GUEST_LABEL);
     uart_print("common nrm_loop done\n\r");
     uart_print("\n[K-HYPERVISOR]TEST#INSTALLATION#BMGUEST-BOOT#PASS\n\r");

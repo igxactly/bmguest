@@ -22,7 +22,6 @@ COMMON_OBJS = $(COMMON_SOURCE_DIR)/guest/core/c_start.o \
 	$(COMMON_SOURCE_DIR)/guest/core/exception.o \
 	$(COMMON_SOURCE_DIR)/guest/core/gic.o \
 	$(COMMON_SOURCE_DIR)/guest/test/test_vdev_sample.o \
-	$(COMMON_SOURCE_DIR)/guest/test/test_vtimer.o \
 	$(COMMON_SOURCE_DIR)/log/string.o \
 	$(COMMON_SOURCE_DIR)/guest/core/guest.o
 	
