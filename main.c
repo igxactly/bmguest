@@ -28,10 +28,22 @@ int main()
     uart_print("\n\rCNTPCT before (low): ");
     uart_print_hex32((uint32_t) read_cp64(CNTPCT));
     write_cp32(0x400000, CNTP_TVAL); /* let's see if interrupt occurs */
+    uart_print("\n\rCNTPCT: ");
+    uart_print_hex32((uint32_t) read_cp64(CNTPCT));
+
+    uart_print("\n\rCNTPCT: ");
+    uart_print_hex32((uint32_t) read_cp64(CNTPCT));
 
     uint32_t p_ctl = read_cp32(CNTP_CTL);
+
+    uart_print("\n\rCNTPCT: ");
+    uart_print_hex32((uint32_t) read_cp64(CNTPCT));
+
     p_ctl = 1u; /* enable, unmask */
     write_cp32(p_ctl, CNTP_CTL);
+
+    uart_print("\n\rCNTPCT: ");
+    uart_print_hex32((uint32_t) read_cp64(CNTPCT));
 
     // uart_print("\n\r=== Ending platform main\n\r");
 
