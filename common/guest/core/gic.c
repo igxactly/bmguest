@@ -1,6 +1,5 @@
 #include "gic.h"
 #include "gic_regs.h"
-#include <log/uart_print.h>
 #include <hvmm_trace.h>
 #include <armv7_p15.h>
 /* #ifdef _SMP_ */
@@ -67,12 +66,8 @@ static void gic_test_vdev_access(void)
     /* 8/16 bit access test */
     s_reg8 = (uint8_t *) &(_gic.ba_gicd[GICD_ISENABLER]);
     s_reg8[2] = 0xf;
-    uart_print_hex32(_gic.ba_gicd[GICD_ISENABLER]);
-    uart_print("\n\r");
     s_reg8 = (uint8_t *) &(_gic.ba_gicd[GICD_ICENABLER]);
     s_reg8[2] = 0xf;
-    uart_print_hex32(_gic.ba_gicd[GICD_ISENABLER]);
-    uart_print("\n\r");
     HVMM_TRACE_EXIT();
 }
 
@@ -81,41 +76,8 @@ static void gic_dump_registers(void)
     uint32_t midr;
     HVMM_TRACE_ENTER();
     midr = read_midr();
-    uart_print("midr:");
-    uart_print_hex32(midr);
-    uart_print("\n\r");
     if ((midr & MIDR_MASK_PPN) == MIDR_PPN_CORTEXA15) {
         uint32_t value;
-        uart_print("gic baseaddr:");
-        uart_print_hex32(_gic.baseaddr);
-        uart_print("\n\r");
-        uart_print("ba_gicd:");
-        uart_print_hex32((uint32_t)_gic.ba_gicd);
-        uart_print("\n\r");
-        uart_print("GICD_TYPER:");
-        uart_print_hex32(_gic.ba_gicd[GICD_TYPER]);
-        uart_print("\n\r");
-        uart_print("ba_gicc:");
-        uart_print_hex32((uint32_t)_gic.ba_gicc);
-        uart_print("\n\r");
-        uart_print("GICC_CTLR:");
-        uart_print_hex32(_gic.ba_gicc[GICC_CTLR]);
-        uart_print("\n\r");
-        uart_print(" GICC_PMR:");
-        uart_print_hex32(_gic.ba_gicc[GICC_PMR]);
-        uart_print("\n\r");
-        uart_print(" GICC_BPR:");
-        uart_print_hex32(_gic.ba_gicc[GICC_BPR]);
-        uart_print("\n\r");
-        uart_print(" GICC_RPR:");
-        uart_print_hex32(_gic.ba_gicc[(0x0014 / 4)]);
-        uart_print("\n\r");
-        uart_print("GICC_HPPIR:");
-        uart_print_hex32(_gic.ba_gicc[(0x0018 / 4)]);
-        uart_print("\n\r");
-        uart_print("GICC_IIDR:");
-        uart_print_hex32(_gic.ba_gicc[(0x00FC / 4)]);
-        uart_print("\n\r");
         /* Test to see if VGICD on monitor side works as we expect */
         gic_test_vdev_access();
     }
@@ -128,9 +90,6 @@ static hvmm_status_t gic_init_baseaddr(uint32_t *va_base)
     hvmm_status_t result = HVMM_STATUS_UNKNOWN_ERROR;
     HVMM_TRACE_ENTER();
     midr = read_midr();
-    uart_print("midr:");
-    uart_print_hex32(midr);
-    uart_print("\n\r");
     /*
      * Note:
      * We currently support GICv2 with Cortex-A15 only.
@@ -143,10 +102,6 @@ static hvmm_status_t gic_init_baseaddr(uint32_t *va_base)
         _gic.ba_gicc = (uint32_t *)(_gic.baseaddr + GIC_OFFSET_GICC);
         result = HVMM_STATUS_SUCCESS;
     } else {
-        uart_print("GICv2 Unsupported\n\r");
-        uart_print("midr.ppn:");
-        uart_print_hex32(midr & MIDR_MASK_PPN);
-        uart_print("\n\r");
         result = HVMM_STATUS_UNSUPPORTED_FEATURE;
     }
     HVMM_TRACE_EXIT();
@@ -223,12 +178,6 @@ void gic_interrupt(int fiq, void *pregs)
     irq = iar & GICC_IAR_INTID_MASK;
     if (irq < _gic.lines) {
         if (irq == 0) {
-            uart_print("ba_gicd:");
-            uart_print_hex32((uint32_t) _gic.ba_gicd);
-            uart_print("\n\r");
-            uart_print("ba_gicc:");
-            uart_print_hex32((uint32_t) _gic.ba_gicc);
-            uart_print("\n\r");
         }
         /* ISR */
         if (_gic.handlers[irq])
@@ -240,9 +189,6 @@ void gic_interrupt(int fiq, void *pregs)
     } else {
     /*TODO  Need to know why this part occurred*/
     #if 0
-       uart_print("end of irq(no pending):");
-       uart_print_hex32(irq);
-       uart_print("\n\r");
     #endif
     }
 }

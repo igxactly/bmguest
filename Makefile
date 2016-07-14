@@ -21,10 +21,8 @@ COMMON_SOURCE_DIR=./common
 COMMON_OBJS = $(COMMON_SOURCE_DIR)/guest/core/c_start.o \
 	$(COMMON_SOURCE_DIR)/guest/core/exception.o \
 	$(COMMON_SOURCE_DIR)/guest/core/gic.o \
-	$(COMMON_SOURCE_DIR)/guest/test/test_vdev_sample.o \
-	$(COMMON_SOURCE_DIR)/log/string.o \
 	$(COMMON_SOURCE_DIR)/guest/core/guest.o
-	
+
 OBJS = boot.o main.o $(COMMON_OBJS)
 
 OBJS += drivers/uart.o drivers/sp804_timer.o
@@ -52,7 +50,7 @@ GUESTTYPE?=GUEST_HYPMON
 ifeq ($(GUESTTYPE),GUEST_HYPMON)
 GUESTCONFIGS	= -D__MONITOR_CALL_HVC__ -DLDS_PHYS_OFFSET='0x80500000' -DLDS_GUEST_OFFSET='0x80500000' -DLDS_GUEST_STACK='0x8F000000'
 else
-# if GUESTTYPE == GUEST_SECMON, 
+# if GUESTTYPE == GUEST_SECMON,
 #	"smc #0" will be used to switch instead of hvc #??
 GUESTCONFIGS	= -DLDS_PHYS_OFFSET='0xE0000000' -DLDS_GUEST_OFFSET='0xE0000000' -DLDS_GUEST_STACK='0xEF000000'
 endif
@@ -87,20 +85,20 @@ all: $(GUESTBIN)
 
 clean distclean:
 	rm -f $(GUESTIMG) $(GUESTBIN) \
-	model.lds $(OBJS) 
+	model.lds $(OBJS)
 
 $(GUESTIMG): $(OBJS) model.lds
 	$(LD) -o $@ $(OBJS) --script=model.lds
 
 $(GUESTBIN): $(GUESTIMG)
 	$(OBJCOPY) -O binary -S $< $@
-	
+
 guest.o: guest.S
 	@echo "================================================================="
 	@echo "GUESTCONFIGS='$(GUESTCONFIGS)'"
 	@echo "================================================================="
 	$(CC) $(CPPFLAGS) $(GUESTCONFIGS) -DKCMD='$(KCMD)' -c -o $@ $<
-	
+
 
 boot.o: boot.S
 	@echo "================================================================="

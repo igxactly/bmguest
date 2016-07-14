@@ -6,21 +6,21 @@
 #ifdef DEBUG
 #define HVMM_TRACE_ENTER()              \
     do {                                \
-        uart_print(__func__);           \
-        uart_print("() - enter\n\r");   \
+//        uart_print(__func__);           \
+//        uart_print("() - enter\n\r");   \
     } while (0)
 
 #define HVMM_TRACE_EXIT()               \
     do {                                \
-        uart_print(__func__);           \
-        uart_print("() - exit\n\r");    \
+//        uart_print(__func__);           \
+//        uart_print("() - exit\n\r");    \
     } while (0)
 
 #define HVMM_TRACE_HEX32(label, value)  \
     do {                                \
-        uart_print(label);              \
-        uart_print_hex32(value);        \
-        uart_print("\n\r");             \
+//        uart_print(label);              \
+//        uart_print_hex32(value);        \
+//        uart_print("\n\r");             \
     } while (0)
 #else
 #define HVMM_TRACE_ENTER()

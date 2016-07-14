@@ -62,58 +62,10 @@ void nrm_loop(void)
     uint32_t cpu = smp_processor_id();
 #endif
     uart_init();
-    uart_print(GUEST_LABEL);
-    uart_print("=== Starting commom start up\n\r");
-
     gic_init();
+
     /* We are ready to accept irqs with GIC. Enable it now */
     irq_enable();
-    /* Test the sample virtual device.
-     * - Uncomment the following line of code only if 'vdev_sample' is
-     *   registered at the monitor.
-     * - Otherwise, the monitor will hang with data abort.
-     */
-#if 0
-#ifdef TESTS_ENABLE_VDEV_SAMPLE
-    /* Enables receiving virtual timer interrupt */
-    vtimer_mask(0);
-    test_vdev_sample();
-#endif
-    for (i = 0; i < NUM_ITERATIONS; i++) {
-        uart_print(GUEST_LABEL);
-        uart_print("iteration ");
-        uart_print_hex32(i);
-        uart_print("\n\r");
-        nrm_delay();
-#ifdef __MONITOR_CALL_HVC__
-        /* Hyp monitor guest run in Non-secure supervisor mode.
-         Request test hvc ping and yield one after another
-         */
-        if (i & 0x1) {
-            uart_print(GUEST_LABEL);
-            uart_print("hsvc_ping()\n\r");
-            hsvc_ping();
-            uart_print(GUEST_LABEL);
-            uart_print("returned from hsvc_ping()\n\r");
-        } else {
-            uart_print(GUEST_LABEL);
-            uart_print("hsvc_yield()\n\r");
-            hsvc_yield();
-            uart_print(GUEST_LABEL);
-            uart_print("returned from hsvc_yield()\n\r");
-        }
-#else
-        /* Secure monitor guest run in Non-secure supervisor mode
-         Request for switch to Secure mode (sec_loop() in the monitor)
-         */
-        SWITCH_MANUAL();
-#endif
-        nrm_delay();
-    }
-#endif
-    uart_print(GUEST_LABEL);
-    uart_print("common nrm_loop done\n\r");
-    uart_print("\n[K-HYPERVISOR]TEST#INSTALLATION#BMGUEST-BOOT#PASS\n\r");
     /* start platform start up code */
     main();
 }

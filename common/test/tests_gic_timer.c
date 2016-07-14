@@ -22,12 +22,6 @@ static void test_start_timer(void)
     tval = read_cntfrq();
     write_cntp_tval(tval);
     pct = read_cntpct();
-    uart_print("cntpct:");
-    uart_print_hex64(pct);
-    uart_print("\n\r");
-    uart_print("cntp_tval:");
-    uart_print_hex32(tval);
-    uart_print("\n\r");
     /* enable timer */
     ctl = read_cntp_ctl();
     ctl |= 0x1;
@@ -39,7 +33,6 @@ void interrupt_nsptimer(int irq, void *pregs, void *pdata)
 {
     uint32_t ctl;
     struct arch_regs *regs = pregs;
-    uart_print("=======================================\n\r");
     HVMM_TRACE_ENTER();
     /* Disable NS Physical Timer Interrupt */
     ctl = read_cntp_ctl();
@@ -54,16 +47,13 @@ void interrupt_nsptimer(int irq, void *pregs, void *pdata)
         guest_switchto(sched_policy_determ_next(), 0);
     }
     HVMM_TRACE_EXIT();
-    uart_print("=======================================\n\r");
 }
 #if defined(CFG_BOARD_ARNDALE)
 void interrupt_pwmtimer(void *pdata)
 {
     pwm_timer_disable_int();
-    uart_print("=======================================\n\r");
     HVMM_TRACE_ENTER();
     HVMM_TRACE_EXIT();
-    uart_print("=======================================\n\r");
     pwm_timer_enable_int();
 }
 
@@ -72,7 +62,6 @@ hvmm_status_t hvmm_tests_gic_pwm_timer(void)
     /* Testing pwm timer event (timer1, Interrupt ID : 69),
      * Cortex-A15 exynos5250
      * - Periodically triggers timer interrupt
-     * - Just print uart_print
      */
     HVMM_TRACE_ENTER();
     pwm_timer_init();

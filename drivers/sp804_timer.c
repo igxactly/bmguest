@@ -2,7 +2,6 @@
 //#include "hvmm_trace.h"
 //#include "armv7_p15.h"
 #include "sp804_timer.h"
-#include <log/uart_print.h>
 
 #define SP804_BASE 0x1C110000
 
@@ -97,14 +96,9 @@ void interrupt_sp804_timer(int irq, void *pregs, void *pdata)
 {
     uint32_t ctl;
     uint32_t val;
-    uart_print("=======================================\n\r");
     val = sp804_read(SP804_BASE);
-    uart_print("sp804:");
-    uart_print_hex32(val);
-    uart_print("\n\r");
     /* irq clear */
     sp804_irq_clear(SP804_BASE);
-    uart_print("=======================================\n\r");
 }
 
 void hvmm_tests_sp804_timer(void)
