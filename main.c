@@ -18,34 +18,20 @@ int main()
     uart_print(GUEST_LABEL);
     uart_print("\n\r=== Starting platform main\n\r");
 
-#if 0
-    while (1) {
-        uart_print("\n\rCNTP_TVAL: ");
-        uart_print_hex32(read_cp32(CNTP_TVAL));
-    }
-#endif
+    uint64_t p_ct = read_cp64(CNTPCT);
+    //write_cp32(0x5F5E100, CNTP_TVAL); /* let's see if interrupt occurs */
+    uint32_t p_tval = 0x186A0;
+    write_cp32(0x186A0, CNTP_TVAL); /* let's see if interrupt occurs */
 
-    uart_print("\n\rCNTPCT before (low): ");
-    uart_print_hex32((uint32_t) read_cp64(CNTPCT));
-    write_cp32(0x400000, CNTP_TVAL); /* let's see if interrupt occurs */
-    uart_print("\n\rCNTPCT: ");
-    uart_print_hex32((uint32_t) read_cp64(CNTPCT));
+    uart_print("\n\rCNTPCT before setting CNTP_TVAL(low): ");
+    uart_print_hex32((uint32_t) p_ct);
 
-    uart_print("\n\rCNTPCT: ");
-    uart_print_hex32((uint32_t) read_cp64(CNTPCT));
+    uart_print("\n\r we just set CNTP_TVAL to ");
+    uart_print_hex32(p_tval);
 
     uint32_t p_ctl = read_cp32(CNTP_CTL);
-
-    uart_print("\n\rCNTPCT: ");
-    uart_print_hex32((uint32_t) read_cp64(CNTPCT));
-
     p_ctl = 1u; /* enable, unmask */
     write_cp32(p_ctl, CNTP_CTL);
-
-    uart_print("\n\rCNTPCT: ");
-    uart_print_hex32((uint32_t) read_cp64(CNTPCT));
-
-    // uart_print("\n\r=== Ending platform main\n\r");
 
     while (1);
 
