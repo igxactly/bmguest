@@ -229,7 +229,8 @@ void gic_interrupt(int fiq, void *pregs)
     iar = _gic.ba_gicc[GICC_IAR];
     irq = iar & GICC_IAR_INTID_MASK;
     if (irq < _gic.lines) {
-        if (irq == 0 || irq == 30) {
+        // if (irq == 0 || irq == 30) {
+        if (irq == 30) {
             // uart_print("ba_gicd:");
             // uart_print_hex32((uint32_t) _gic.ba_gicd);
             // uart_print("\n\r");
@@ -237,10 +238,29 @@ void gic_interrupt(int fiq, void *pregs)
             // uart_print_hex32((uint32_t) _gic.ba_gicc);
             // uart_print("\n\r\n\r");
 
+            // static uint32_t bigcount = 0;
+            static uint32_t count = 0;
+            static uint64_t last_p_ct = 0;
+
             uint64_t p_ct = read_cp64(CNTPCT);
+            count++;
+            if (count >= 10000 || last_p_ct == 0) {
+                if (last_p_ct > 0) { /* not very first tick */
+                    // bigcount++;
+                    uart_print("\n\r10000 ticks time diff:");
+                    uart_print_hex32((uint32_t) (p_ct - last_p_ct));
+                    uart_print("\n\r");
+                    count = 0;
+                }
+
+                last_p_ct = p_ct;
+            }
+
+            /*
             uart_print("\n\rTimer IRQ! CNTPCT (low): ");
             uart_print_hex32((uint32_t) p_ct);
             uart_print("\n\r\n\r");
+            */
         }
         /* ISR */
         if (_gic.handlers[irq])
